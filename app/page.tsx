@@ -1,13 +1,24 @@
 import Image from "next/image";
+import { mapsUrl, store, whatsappUrl } from "../lib/store";
 import ImageCarousel from "./image-carousel";
 
-const instagramUrl = "https://www.instagram.com/casadolacadortp/";
-const mapsUrl =
-  "https://www.google.com/maps/search/?api=1&query=Rua+Tapuias%2C+95%2C+Tenente+Portela%2C+RS";
+const instagramUrl = store.instagram;
 
-function whatsappUrl(message: string) {
-  return `https://wa.me/5555999586442?text=${encodeURIComponent(message)}`;
-}
+const localBusiness = {
+  "@context": "https://schema.org",
+  "@type": "ClothingStore",
+  name: store.name,
+  description: store.description,
+  telephone: store.phone,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: store.street,
+    addressLocality: store.city,
+    addressRegion: store.region,
+    addressCountry: "BR",
+  },
+  sameAs: [store.instagram],
+};
 
 const products = [
   {
@@ -42,6 +53,11 @@ const products = [
 export default function Home() {
   return (
     <>
+      <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness).replace(/</g, "\\u003c") }}
+      />
       <div className="topline">TRADIÇÃO GAÚCHA EM TENENTE PORTELA, RS</div>
 
       <header className="site-header" id="inicio">
@@ -55,21 +71,22 @@ export default function Home() {
 
         <nav className="main-nav" aria-label="Navegação principal">
           <a href="#colecao">Nossa seleção</a>
-          <a href="#sobre">A loja</a>
+          <a href={instagramUrl} target="_blank" rel="noopener noreferrer">Instagram</a>
           <a href="#visite">Onde estamos</a>
         </nav>
 
         <a
           className="header-contact"
+          aria-label="Fale com a loja no WhatsApp"
           href={whatsappUrl("Olá! Gostaria de saber mais sobre a Casa do Laçador.")}
           target="_blank"
           rel="noopener noreferrer"
         >
-          Fale no WhatsApp <span aria-hidden="true">↗</span>
+          WhatsApp <span aria-hidden="true">↗</span>
         </a>
       </header>
 
-      <main>
+      <main id="conteudo" tabIndex={-1}>
         <section className="hero" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="eyebrow"><span /> CASA DO LAÇADOR · TENENTE PORTELA</p>
@@ -103,7 +120,7 @@ export default function Home() {
             <Image
               src="/images/campo-e-tradicao.jpg"
               fill
-              priority
+              preload
               sizes="(max-width: 800px) 100vw, 50vw"
               alt="Pessoa com poncho e chapéu montada a cavalo no campo"
               className="hero-photo"
@@ -118,12 +135,12 @@ export default function Home() {
           </div>
         </section>
 
-        <div className="category-strip" aria-label="Categorias da loja">
-          <span>PILCHAS</span><i aria-hidden="true">✦</i>
-          <span>BOTAS</span><i aria-hidden="true">✦</i>
-          <span>VESTIMENTA TRADICIONAL</span><i aria-hidden="true">✦</i>
-          <span>ESTILO GAÚCHO</span>
-        </div>
+        <ul className="category-strip" aria-label="Categorias da loja">
+          <li>PILCHAS</li>
+          <li>BOTAS</li>
+          <li>VESTIMENTA TRADICIONAL</li>
+          <li>ESTILO GAÚCHO</li>
+        </ul>
 
         <section className="collection section-wrap" id="colecao" aria-labelledby="collection-title">
           <div className="section-heading">
@@ -217,14 +234,14 @@ export default function Home() {
           <div className="visit-details">
             <div className="visit-address">
               <span className="detail-label">NOSSO ENDEREÇO</span>
-              <address>Rua Tapuias, 95<br />Tenente Portela, RS</address>
+              <address>{store.street}<br />{store.city}, {store.region}</address>
               <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
                 Ver rota no mapa <span aria-hidden="true">↗</span>
               </a>
             </div>
             <div className="visit-contact">
               <span className="detail-label">FALE COM A LOJA</span>
-              <p>(55) 99958-6442</p>
+              <p><a className="telephone" href={`tel:${store.phone}`}>{store.phoneDisplay}</a></p>
               <a
                 href={whatsappUrl("Olá! Gostaria de falar com a Casa do Laçador.")}
                 target="_blank"

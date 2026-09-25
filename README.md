@@ -17,8 +17,9 @@ Importe este repositório na Vercel. O framework Next.js é detectado automatica
 
 ## Conteúdo
 
-- Texto, links de WhatsApp, Instagram e mapa: `app/page.tsx`
-- Título e descrição para compartilhamento: `app/layout.tsx`
+- Telefone, endereço, Instagram e links de contato: `lib/store.ts`
+- Textos e seções da página: `app/page.tsx`
+- Título, descrição e imagem para compartilhamento: `app/layout.tsx`
 - Cores e layout: `app/globals.css`
 - Fotos e logotipo: `public/images/`
 - Fotos e textos do carrossel: `app/image-carousel.tsx`

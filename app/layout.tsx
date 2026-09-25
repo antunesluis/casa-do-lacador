@@ -1,20 +1,30 @@
 import type { Metadata } from "next";
+import { store } from "../lib/store";
 import "./globals.css";
+
+const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000",
+    productionHost ? `https://${productionHost}` : "http://localhost:3000",
   ),
-  title: "Casa do Laçador | Artigos gaúchos em Tenente Portela",
+  title: `${store.name} | Artigos gaúchos em Tenente Portela`,
   description:
     "Pilchas, botas e vestimenta tradicional gaúcha em Tenente Portela, RS. Conheça a Casa do Laçador e fale conosco pelo WhatsApp.",
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Casa do Laçador",
+    title: store.name,
     description: "A tradição gaúcha para vestir e viver. Tenente Portela, RS.",
     locale: "pt_BR",
     type: "website",
-    images: ["/images/campo-e-tradicao.jpg"],
+    images: [{
+      url: "/images/pilcha-bordo.jpg",
+      width: 900,
+      height: 900,
+      alt: "Pilcha tradicional em tons de bordô da Casa do Laçador",
+    }],
   },
+  twitter: { card: "summary_large_image", images: ["/images/pilcha-bordo.jpg"] },
 };
 
 export default function RootLayout({
